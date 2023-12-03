@@ -7,9 +7,13 @@ import '../events/event.dart';
 class PlayerBloc extends Bloc<Event,PlayerPageState>{
 
   PlayerBloc():super(PlayerPageState()){
-    on<VideoPlay>((event, emit) => null);
+    on<VideoLoaded>((event, emit) {
+      state.isVideoLoaded = event.isLoaded;
+      return emit(state.update(state));
+    });
     on<PassInitialValue>((event, emit) {
       state.videoInfo = event.videoInfo;
+      state.isVideoLoaded = false;
       return emit(state.update(state));
     });
   }

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_video_player_app/blocs/player_block.dart';
 import 'package:simple_video_player_app/device_info.dart';
+import 'package:simple_video_player_app/events/player_page_event.dart';
 import 'package:simple_video_player_app/screens/blank_page.dart';
 import 'package:simple_video_player_app/states/player_page_state.dart';
+import 'package:lecle_yoyo_player/lecle_yoyo_player.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({super.key});
@@ -14,6 +16,14 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   PlayerBloc bloc = PlayerBloc();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print("dispose");
+    context.read<PlayerBloc>().add(VideoLoaded(false));
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +39,40 @@ class _PlayerPageState extends State<PlayerPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 200,
-                  width: DeviceInfo(this.context).width,
-                  child: Image.network(
-                    state.videoInfo?.thumbnail ?? "",
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    height: 200,
+                    width: DeviceInfo(this.context).width,
+                    child: Stack(
+                      children: [
+                        YoYoPlayer(
+                          aspectRatio: 16 / 9,
+                          url: state.videoInfo?.manifest ?? "",
+                          onVideoInitCompleted: (controller) {
+                            controller.addListener(() {
+                              print("controller.value.isInitialized ${controller.value.isInitialized}");
+                              if (controller.value.isInitialized && !state.isVideoLoaded) {
+                                print("is load");
+                                context.read<PlayerBloc>().add(VideoLoaded(true));
+                              }
+                            });
+
+
+                          },
+                          videoStyle: VideoStyle(
+                            playIcon: Icon(Icons.play_arrow),
+                            pauseIcon: Icon(Icons.pause),
+                            fullscreenIcon: Icon(Icons.fullscreen),
+                            forwardIcon: Icon(Icons.skip_next),
+                            backwardIcon: Icon(Icons.skip_previous),
+                          ),
+                          videoLoadingStyle: VideoLoadingStyle(),
+                        ),
+                        if (!state.isVideoLoaded)
+                          Image.network(
+                            state.videoInfo?.thumbnail ?? "",
+                            fit: BoxFit.cover,
+                          ),
+                      ],
+                    )),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14.0),
                   child: Text(
@@ -103,8 +140,10 @@ class _PlayerPageState extends State<PlayerPage> {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BlankPage(title: "Channel")));
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  BlankPage(title: "Channel")));
                         },
                         child: Row(
                           children: [
@@ -115,7 +154,8 @@ class _PlayerPageState extends State<PlayerPage> {
                                   borderRadius: BorderRadius.circular(20),
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                          state.videoInfo?.channelImage ?? ""))),
+                                          state.videoInfo?.channelImage ??
+                                              ""))),
                             ),
                             SizedBox(
                               width: 6,
@@ -136,7 +176,8 @@ class _PlayerPageState extends State<PlayerPage> {
                                 ),
                                 Text(
                                   "${state.videoInfo?.channelSubscriber ?? 0} Subscribers",
-                                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
                                 ),
                               ],
                             ),
@@ -169,7 +210,7 @@ class _PlayerPageState extends State<PlayerPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   child: Row(
                     children: [
                       Text(
@@ -186,7 +227,8 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BlankPage(title: "Comment")));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BlankPage(title: "Comment")));
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 14),
@@ -194,14 +236,17 @@ class _PlayerPageState extends State<PlayerPage> {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey, width: 1),
                         borderRadius: BorderRadius.circular(10)),
-                    child:const Row(
+                    child: const Row(
                       children: [
                         Text(
                           "Add Comment",
                           style: TextStyle(color: Colors.grey),
                         ),
                         Spacer(),
-                        Icon(Icons.send_outlined,color: Colors.grey,)
+                        Icon(
+                          Icons.send_outlined,
+                          color: Colors.grey,
+                        )
                       ],
                     ),
                   ),

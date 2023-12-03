@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc: ^8.1.3
   http: ^1.1.0
   intl: ^0.18.1
+  lecle_yoyo_player: ^0.0.8
 
 dev_dependencies:
   flutter_test:

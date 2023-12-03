@@ -5,5 +5,8 @@ class PassInitialValue extends Event{
   PassInitialValue(this.videoInfo);
 }
 
-class VideoPlay extends Event{
+class VideoLoaded extends Event{
+  bool isLoaded;
+
+  VideoLoaded(this.isLoaded);
 }

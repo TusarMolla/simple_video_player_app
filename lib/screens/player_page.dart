@@ -12,21 +12,30 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
+  PlayerBloc bloc = PlayerBloc();
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: BlocBuilder<PlayerBloc,PlayerPageState>(
-        builder: (context,state) {
-          return SingleChildScrollView(
-            child: Container(
+      body:
+      //Container(),
+      SingleChildScrollView(
+        child: BlocBuilder<PlayerBloc,PlayerPageState>(
+          // bloc: bloc,
+          builder: (context2,state) {
+            return SingleChildScrollView(
               child: Container(
-                height: 200,
-                width: DeviceInfo(context).width,
-                child: Image.network(state.videoInfo?.thumbnail??"",fit: BoxFit.cover,),
+                height: 1000,
+                child: Container(
+                  height: 200,
+                  // width: DeviceInfo(this.context).width,
+                  child: Image.network(state.videoInfo?.thumbnail??"",fit: BoxFit.cover,),
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
+        ),
       ),
     );
   }

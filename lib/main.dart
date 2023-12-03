@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:simple_video_player_app/app_config.dart';
 import 'package:simple_video_player_app/blocs/player_block.dart';
-import 'package:simple_video_player_app/events/home_page_event.dart';
 import 'package:simple_video_player_app/events/player_page_event.dart';
 import 'package:simple_video_player_app/screens/player_page.dart';
 import 'package:simple_video_player_app/states/home_page_state.dart';
 import 'package:simple_video_player_app/blocs/home_page_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Builder(
+    builder: (context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<HomePageBloc>(create: (context) => HomePageBloc(),
+            //child: MyHomePage(title: "Trending Videos"),
+          ),
+          BlocProvider<PlayerBloc>(create: (_) => PlayerBloc(),
+            child: const PlayerPage(),
+          ),
+        ],
+        child:const MyApp(),
+      );
+    }
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,17 +40,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "PublicSansSerif",
         fontFamilyFallback: ['Sutonnymj'],
       ),
-      home:MultiBlocProvider(
-       providers: [
-         BlocProvider<HomePageBloc>(create: (_) => HomePageBloc(),
-           // child: MyHomePage(title: "Trending Videos"),
-         ),
-         BlocProvider<PlayerBloc>(create: (_) => PlayerBloc(),
-           // child: PlayerPage(),
-         )
-         ,],
-        child:const MyHomePage(title: "Trending Videos"),
-      ),
+      home:MyHomePage(title: "Trending Videos"),
     );
   }
 }

@@ -9,7 +9,7 @@ class PlayerPageState {
 
 
  PlayerPageState update(PlayerPageState state){
-    PlayerPageState pageState= new PlayerPageState();
+    PlayerPageState pageState=  PlayerPageState();
     pageState.videoInfo = state.videoInfo;
 
     return pageState;

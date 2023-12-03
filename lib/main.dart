@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(state.videos[index].title,maxLines: 2,style:const TextStyle(fontSize: 15,color: Colors.black,fontWeight: FontWeight.w600),),
+                                    Text(state.videos[index].title,maxLines: 2,style:const TextStyle(fontSize: 15,color: Colors.black,fontWeight: FontWeight.w600),),
                                   Row(
                                     children: [
                                   Text("${state.videos[index].viewers} views",style:const TextStyle(fontSize: 12,color: Colors.grey),),

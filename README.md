@@ -1,6 +1,8 @@
 
 <p style="color:blue" align="center"><a href="https://flutter.dev" target="_blank"><img src="https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg" width="400" alt="Flutter"></a></p>
 <h1 align="center">Simple Video Streaming App</h1>
+<h1 align="center">Flutter SDK version 3.10.4 on channel stable</h1>
+
 
 
 ## Getting Started

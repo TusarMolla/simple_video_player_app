@@ -71,17 +71,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: BlocBuilder<HomePageBloc,HomePageState>(
         builder: (context,state) {
-          return ListView.separated(
-            padding: EdgeInsets.only(left: 14,right: 14,bottom: 14),
-            controller: state.scrollController,
-            itemCount: state.videos.length,
-            itemBuilder: (context,index) {
-              return Center(
-                child: listViewModel(state, index),
-              );
-            }, separatorBuilder: (BuildContext context, int index) { return  Container(
-            // color: Colors.red,
-            height: 14,); },
+          return Center(
+            child: state.isDataLoaded?ListView.separated(
+              padding: EdgeInsets.only(left: 14,right: 14,bottom: 14),
+              controller: state.scrollController,
+              itemCount: state.videos.length,
+              itemBuilder: (context,index) {
+                return Center(
+                  child: listViewModel(state, index),
+                );
+              }, separatorBuilder: (BuildContext context, int index) { return  Container(
+              // color: Colors.red,
+              height: 14,); },
+            ):const CircularProgressIndicator(),
           );
         }
       ),

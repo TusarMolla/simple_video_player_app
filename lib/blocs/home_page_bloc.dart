@@ -20,6 +20,7 @@ class HomePageBloc extends Bloc<Event,HomePageState>{
       var res = await PlayerRepository().getList(state.page);
       state.page = res.links.next;
       state.videos.addAll(res.results);
+      state.isDataLoaded=true;
     }
       return state.update(state);
   }
